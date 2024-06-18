@@ -30,4 +30,10 @@ public class ProductController {
         Product product = productService.getProduct(title);
         return ResponseEntity.ok(product);
     }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<ProductDTO>> searchByTitle(@RequestParam String title) {
+        List<ProductDTO> productDTOS = productService.findByTitle(title);
+        return ResponseEntity.ok(productDTOS);
+    }
 }

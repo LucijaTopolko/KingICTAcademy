@@ -29,4 +29,15 @@ public class ProductService {
         }
         return productDTOS;
     }
+
+    public List<ProductDTO> findByTitle(String title) {
+        List<Product> products= productRepository.findByTitleContainingIgnoreCase(title);
+
+        List<ProductDTO> productDTOS = new ArrayList<>();
+
+        for (Product product:products) {
+            productDTOS.add(new ProductDTO(product.getThumbnail(),product.getTitle(),product.getPrice(),product.getDescription()));
+        }
+        return productDTOS;
+    }
 }
