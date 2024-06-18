@@ -33,7 +33,7 @@ public class Product {
     @JoinColumn(name = "metaData_id", referencedColumnName = "id")
     private MetaData meta;
 
-    @OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
+    @OneToMany(cascade = CascadeType.ALL)
     private List<Review> reviews;
 
     @ElementCollection

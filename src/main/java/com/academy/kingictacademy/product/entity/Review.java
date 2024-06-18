@@ -12,18 +12,14 @@ public class Review {
     private String date;
     private String reviewerName;
     private String reviewerEmail;
-    @ManyToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
 
-    public Review(Long id, int rating, String comment, String date, String reviewerName, String reviewerEmail, Product product) {
+    public Review(Long id, int rating, String comment, String date, String reviewerName, String reviewerEmail) {
         this.id = id;
         this.rating = rating;
         this.comment = comment;
         this.date = date;
         this.reviewerName = reviewerName;
         this.reviewerEmail = reviewerEmail;
-        this.product = product;
     }
 
     public Review() {
