@@ -25,4 +25,9 @@ public class ProductController {
         return ResponseEntity.ok(productDTOS);
     }
 
+    @GetMapping()
+    public ResponseEntity<Product> getProduct(@RequestParam String title){
+        Product product = productService.getProduct(title);
+        return ResponseEntity.ok(product);
+    }
 }

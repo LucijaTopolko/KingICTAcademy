@@ -15,6 +15,10 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    public Product getProduct(String title) {
+        return productRepository.getProductByTitle(title);
+    }
+
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
