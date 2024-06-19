@@ -36,4 +36,13 @@ public class ProductController {
         List<ProductDTO> productDTOS = productService.findByTitle(title);
         return ResponseEntity.ok(productDTOS);
     }
+
+    @GetMapping("/filter")
+    public ResponseEntity<List<ProductDTO>> filterProducts(@RequestParam(value = "category", required = false) String category,
+                                                     @RequestParam(value = "minPrice", required = false) Double minPrice,
+                                                     @RequestParam(value = "maxPrice", required = false) Double maxPrice) {
+        List<ProductDTO> productDTOS = productService.filter(category,minPrice,maxPrice);
+
+        return ResponseEntity.ok(productDTOS);
+    }
 }
