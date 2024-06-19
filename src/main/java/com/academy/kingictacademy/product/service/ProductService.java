@@ -6,8 +6,8 @@ import com.academy.kingictacademy.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProductService {
@@ -15,40 +15,36 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    private List<ProductDTO> productToDTO(List<Product> products) {
+        return products.stream()
+                .map(product -> new ProductDTO(
+                        product.getThumbnail(),
+                        product.getTitle(),
+                        product.getPrice(),
+                        product.getDescription()))
+                .collect(Collectors.toList());
+    }
+
+
     public Product getProduct(String title) {
-        return productRepository.getProductByTitle(title);
+        return productRepository.getProductByTitleIgnoreCase(title);
     }
 
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
 
-        List<ProductDTO> productDTOS = new ArrayList<>();
-
-        for (Product product:products) {
-            productDTOS.add(new ProductDTO(product.getThumbnail(),product.getTitle(),product.getPrice(),product.getDescription()));
-        }
-        return productDTOS;
+        return productToDTO(products);
     }
 
     public List<ProductDTO> findByTitle(String title) {
         List<Product> products= productRepository.findByTitleContainingIgnoreCase(title);
 
-        List<ProductDTO> productDTOS = new ArrayList<>();
-
-        for (Product product:products) {
-            productDTOS.add(new ProductDTO(product.getThumbnail(),product.getTitle(),product.getPrice(),product.getDescription()));
-        }
-        return productDTOS;
+        return productToDTO(products);
     }
 
     public List<ProductDTO> filter(String category, Double minPrice, Double maxPrice) {
         List<Product> products = productRepository.findByCategoryAndPriceBetween(category, minPrice, maxPrice);
 
-        List<ProductDTO> productDTOS = new ArrayList<>();
-
-        for (Product product:products) {
-            productDTOS.add(new ProductDTO(product.getThumbnail(),product.getTitle(),product.getPrice(),product.getDescription()));
-        }
-        return productDTOS;
+        return productToDTO(products);
     }
 }
