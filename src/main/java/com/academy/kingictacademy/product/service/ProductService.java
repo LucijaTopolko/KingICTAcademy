@@ -9,6 +9,7 @@ import com.academy.kingictacademy.product.entity.Product;
 import com.academy.kingictacademy.product.entity.ProductDTO;
 import com.academy.kingictacademy.product.repository.ProductRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -33,7 +34,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
-
+    @CacheEvict(value = "productdetails", allEntries = true)
     public Product getProduct(String title) {
         Product product = productRepository.getProductByTitleIgnoreCase(title);
         if (product==null) {
@@ -42,6 +43,7 @@ public class ProductService {
         return product;
     }
 
+    @CacheEvict(value = "allproducts", allEntries = true)
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
         if(products.isEmpty()) {
@@ -50,6 +52,7 @@ public class ProductService {
         return productToDTO(products);
     }
 
+    @CacheEvict(value = "search", allEntries = true)
     public List<ProductDTO> findByTitle(String title) {
         List<Product> products= productRepository.findByTitleContainingIgnoreCase(title);
         if(products.isEmpty()) {
@@ -58,6 +61,7 @@ public class ProductService {
         return productToDTO(products);
     }
 
+    @CacheEvict(value = "filter", allEntries = true)
     public List<ProductDTO> filter(String category, Double minPrice, Double maxPrice) {
         if (category!=null) {
             Category c = categoryRepository.findBySlug(category);
