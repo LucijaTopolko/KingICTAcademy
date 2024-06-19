@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Long> {
-    Product getProductByTitle(String title);
+    Product getProductByTitleIgnoreCase(String title);
     List<Product> findByTitleContainingIgnoreCase(String title);
 
     @Query("SELECT p FROM Product p WHERE " +
