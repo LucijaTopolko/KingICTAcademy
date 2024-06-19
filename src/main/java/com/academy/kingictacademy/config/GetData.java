@@ -5,18 +5,22 @@ import com.academy.kingictacademy.category.CategoryRepository;
 import com.academy.kingictacademy.product.entity.Product;
 import com.academy.kingictacademy.product.entity.ProductResponse;
 import com.academy.kingictacademy.product.repository.ProductRepository;
+import com.academy.kingictacademy.user.entity.LoginData;
 import com.academy.kingictacademy.user.entity.User;
 import com.academy.kingictacademy.user.entity.UserResponse;
+import com.academy.kingictacademy.user.repository.LoginRepository;
 import com.academy.kingictacademy.user.repository.UserRepository;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class GetData {
@@ -25,10 +29,16 @@ public class GetData {
     private UserRepository userRepository;
 
     @Autowired
+    private LoginRepository loginRepository;
+
+    @Autowired
     private ProductRepository productRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
+
+    @Autowired
+    PasswordEncoder passwordEncoder;
 
     @Value("${users.api.url}")
     private String usersUrl;
@@ -57,7 +67,14 @@ public class GetData {
 
         List<User> users = userResponse.getUsers();
 
-        userRepository.saveAll(users);
+        for (User user : users) {
+            Optional<User> existingUser = userRepository.findUserByUsernameIgnoreCase(user.getUsername());
+            if (existingUser.isEmpty()) {
+                loginRepository.save(new LoginData(user.getUsername(), passwordEncoder.encode(user.getPassword()), user.getRole()));
+                userRepository.save(user);
+            }
+        }
+
     }
 
     public void getProducts() throws JsonProcessingException {
@@ -69,7 +86,12 @@ public class GetData {
 
         List<Product> products = productResponse.getProducts();
 
-        productRepository.saveAll(products);
+        for (Product product : products) {
+            Optional<Product> existingProduct = productRepository.findByTitleIgnoreCase(product.getTitle());
+            if (existingProduct.isEmpty()) {
+                productRepository.save(product);
+            }
+        }
     }
 
     public void getCategories() throws JsonProcessingException {
@@ -80,8 +102,8 @@ public class GetData {
         Category[] categories = objectMapper.readValue(json, Category[].class);
 
         for (Category category: categories) {
-            Category c = categoryRepository.findBySlug(category.getSlug());
-            if (c==null) {
+            Optional<Category> existingCategory = categoryRepository.findBySlug(category.getSlug());
+            if (existingCategory.isEmpty()) {
                 categoryRepository.save(category);
             }
         }

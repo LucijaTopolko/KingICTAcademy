@@ -13,6 +13,7 @@ import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,8 +65,8 @@ public class ProductService {
     @CacheEvict(value = "filter", allEntries = true)
     public List<ProductDTO> filter(String category, Double minPrice, Double maxPrice) {
         if (category!=null) {
-            Category c = categoryRepository.findBySlug(category);
-            if (c == null) {
+            Optional<Category> c = categoryRepository.findBySlug(category);
+            if (c.isEmpty()) {
                 throw new NoCategoryException("Ova kategorija ne postoji!");
             }
         }

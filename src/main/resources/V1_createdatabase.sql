@@ -34,6 +34,12 @@ CREATE TABLE users (
                        FOREIGN KEY (crypto_id) REFERENCES crypto(id)
 );
 
+CREATE TABLE logindata (
+                       id BIGINT AUTO_INCREMENT PRIMARY KEY,
+                       username VARCHAR(255),
+                       password VARCHAR(255)
+)
+
 CREATE TABLE address (
                          id BIGINT PRIMARY KEY,
                          address VARCHAR(255),

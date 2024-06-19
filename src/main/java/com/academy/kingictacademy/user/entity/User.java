@@ -88,6 +88,11 @@ public class User {
         this.role = role;
     }
 
+    @PrePersist
+    public void deletePassword() {
+        this.password="";
+    }
+
     public Long getId() {
         return id;
     }
