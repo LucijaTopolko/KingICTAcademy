@@ -1,5 +1,6 @@
 package com.academy.kingictacademy.product.service;
 
+import com.academy.kingictacademy.exceptions.NoProductException;
 import com.academy.kingictacademy.product.entity.Product;
 import com.academy.kingictacademy.product.entity.ProductDTO;
 import com.academy.kingictacademy.product.repository.ProductRepository;
@@ -27,7 +28,11 @@ public class ProductService {
 
 
     public Product getProduct(String title) {
-        return productRepository.getProductByTitleIgnoreCase(title);
+        Product product = productRepository.getProductByTitleIgnoreCase(title);
+        if (product==null) {
+            throw new NoProductException("Proizvod ovog naziva ne postoji u bazi!");
+        }
+        return product;
     }
 
     public List<ProductDTO> getAllProducts() {
