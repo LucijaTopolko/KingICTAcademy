@@ -24,6 +24,7 @@ public class WebSecurity  {
     @Autowired
     private UserDetailService userDetailService;
 
+    //endpointima mogu pristupati samo admini
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         return httpSecurity

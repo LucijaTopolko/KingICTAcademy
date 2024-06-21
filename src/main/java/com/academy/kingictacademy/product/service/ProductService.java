@@ -25,6 +25,7 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
+    // pretvara listu proizvoda u listu ProductDTO
     public List<ProductDTO> productToDTO(List<Product> products) {
         return products.stream()
                 .map(product -> new ProductDTO(
@@ -35,6 +36,7 @@ public class ProductService {
                 .collect(Collectors.toList());
     }
 
+    // pronalazi podatke o nekom proizvodu
     @CacheEvict(value = "productdetails", allEntries = true)
     public Product getProduct(String title) {
         Product product = productRepository.getProductByTitleIgnoreCase(title);
@@ -44,6 +46,7 @@ public class ProductService {
         return product;
     }
 
+    // pronalazi sve proizvode iz baze
     @CacheEvict(value = "allproducts", allEntries = true)
     public List<ProductDTO> getAllProducts() {
         List<Product> products = productRepository.findAll();
@@ -53,6 +56,7 @@ public class ProductService {
         return productToDTO(products);
     }
 
+    // pronalazi sve proizvode po nazivu
     @CacheEvict(value = "search", allEntries = true)
     public List<ProductDTO> findByTitle(String title) {
         List<Product> products= productRepository.findByTitleContainingIgnoreCase(title);
@@ -62,6 +66,7 @@ public class ProductService {
         return productToDTO(products);
     }
 
+    // pronalazi sve proizvode koji zadovoljavaju filter
     @CacheEvict(value = "filter", allEntries = true)
     public List<ProductDTO> filter(String category, Double minPrice, Double maxPrice) {
         if (category!=null) {
