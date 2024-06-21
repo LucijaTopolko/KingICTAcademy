@@ -1,5 +1,7 @@
 package com.academy.kingictacademy.product.entity;
 
+import java.util.Objects;
+
 public class ProductDTO {
     private String thumbnail;
     private String title;
@@ -53,5 +55,18 @@ public class ProductDTO {
         } else {
             this.description = description;
         }
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ProductDTO that = (ProductDTO) o;
+        return Double.compare(price, that.price) == 0 && Objects.equals(thumbnail, that.thumbnail) && Objects.equals(title, that.title) && Objects.equals(description, that.description);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(thumbnail, title, price, description);
     }
 }

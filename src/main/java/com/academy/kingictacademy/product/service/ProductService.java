@@ -25,7 +25,7 @@ public class ProductService {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    private List<ProductDTO> productToDTO(List<Product> products) {
+    public List<ProductDTO> productToDTO(List<Product> products) {
         return products.stream()
                 .map(product -> new ProductDTO(
                         product.getThumbnail(),
